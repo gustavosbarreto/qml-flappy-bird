@@ -1,7 +1,9 @@
-import QtQuick 1.1
+import QtQuick 2.0
+import QtQuick.Controls 1.4
 
-Rectangle {
+ApplicationWindow {
     id: game
+    visible: true
 
     property bool initialized: false
     property alias bird: bird
@@ -118,7 +120,7 @@ Rectangle {
         birdRotation.start()
     }
 
-    Keys.onSpacePressed: flappy()
+    Keys.onPressed: flappy()
 
     Image {
         id: background
