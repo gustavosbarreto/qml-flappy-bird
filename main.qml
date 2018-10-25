@@ -125,16 +125,21 @@ Window {
         focus: true
         clip: true
 
-        anchors.centerIn: parent
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.verticalCenter: parent.verticalCenter
 
         Keys.onPressed: game.flappy()
 
         Image {
             id: background
             source: "sprites/bg.png"
-            width: 288
-            height: 511
+            width: parent.width
+            height: parent.height
             fillMode: Image.TileHorizontally
+
+
+            //anchors.verticalCenter: parent.verticalCenter
 
             Timer {
                 id: backgroundAnim
@@ -143,8 +148,8 @@ Window {
                 running: true
 
                 onTriggered: {
-                    background.x -= 1
-                    background.width += 1
+                    background.x -= 2
+                    background.width += 2
                 }
             }
 
@@ -157,10 +162,12 @@ Window {
         Image {
             id: ground
             source: "sprites/ground.png"
-            width: 288
+
             height: 112
             y: parent.height - height
             fillMode: Image.TileHorizontally
+
+            width: parent.width
 
             Connections {
                 target: game
@@ -181,8 +188,8 @@ Window {
                 running: true
 
                 onTriggered: {
-                    ground.x -= 1
-                    ground.width += 1
+                    ground.x -= 6
+                    ground.width += 6
                 }
             }
         }
