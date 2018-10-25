@@ -129,7 +129,13 @@ Window {
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
 
-        Keys.onPressed: game.flappy()
+        Keys.onPressed: {
+            if (playAgain.opacity == 1) {
+                playAgain.restart();
+            } else {
+                game.flappy()
+            }
+        }
 
         Image {
             id: background
@@ -269,27 +275,24 @@ Window {
             opacity: 0
             z: 2
 
-            MouseArea {
-                anchors.fill: parent
+            function restart() {
+                playAgain.opacity = 0;
+                medalsTable.opacity = 0;
 
-                onClicked: {
-                    playAgain.opacity = 0;
-                    medalsTable.opacity = 0;
+                gameOverSplash.y = -gameOverSplash.height;
+                ready.opacity = 1;
+                tap.opacity = 1;
+                game.destroyPipes();
 
-                    gameOverSplash.y = -gameOverSplash.height;
-                    ready.opacity = 1;
-                    tap.opacity = 1;
-                    game.destroyPipes();
+                backgroundAnim.start();
+                groundAnim.start();
 
-                    backgroundAnim.start();
-                    groundAnim.start();
+                bird.y = 180;
+                bird.rotation = 0;
 
-                    bird.y = 180;
-                    bird.rotation = 0;
-
-                    gravity.interval = 9;
-                }
+                gravity.interval = 9;
             }
+
         }
 
         Timer {
