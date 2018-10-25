@@ -1,17 +1,16 @@
 import QtQuick 2.0
-import QtQuick.Controls 1.4
+import QtQuick.Window 2.2
 
-ApplicationWindow {
+Window {
     id: game
     visible: true
+    visibility: Window.FullScreen
 
     property bool initialized: false
     property alias bird: bird
 
     width: 288
     height: 511
-
-    focus: true
 
     signal birdPositionChanged
     signal gameOver
@@ -120,7 +119,10 @@ ApplicationWindow {
         birdRotation.start()
     }
 
-    Keys.onPressed: flappy()
+    Item {
+        focus: true
+        Keys.onPressed: game.flappy()
+    }
 
     Image {
         id: background
