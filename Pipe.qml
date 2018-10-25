@@ -32,7 +32,7 @@ Item {
         running: true
         target: pipe
         properties: "x"
-        from: parent.width
+        from: parent.width + pipe.width
         to: pipe.width*-1
         duration: 4000
     }

@@ -28,7 +28,7 @@ Window {
 
         gravity.interval = 6
 
-//        gameOverAnim.start();
+        //        gameOverAnim.start();
 
         score.opacity = 0;
     }
@@ -120,201 +120,207 @@ Window {
     }
 
     Item {
-        focus: true
-        Keys.onPressed: game.flappy()
-    }
-
-    Image {
-        id: background
-        source: "sprites/bg.png"
         width: 288
         height: 511
-        fillMode: Image.TileHorizontally
+        focus: true
+        clip: true
 
-        Timer {
-            id: backgroundAnim
-            interval: 75
-            repeat: true
-            running: true
+        anchors.centerIn: parent
 
-            onTriggered: {
-                background.x -= 1
-                background.width += 1
-            }
-        }
-
-        MouseArea {
-            anchors.fill: parent
-            onClicked: flappy()
-        }
-    }
-
-    Image {
-        id: ground
-        source: "sprites/ground.png"
-        width: 288
-        height: 112
-        y: parent.height - height
-        fillMode: Image.TileHorizontally
-
-        Connections {
-            target: game
-
-            onBirdPositionChanged: {
-                if (game.bird.y + game.bird.height >= ground.y) {
-                    if (game.initialized) game.terminateGame()
-                    gravity.stop()
-                    gameOverAnim.start();
-                }
-            }
-        }
-
-        Timer {
-            id: groundAnim
-            interval: 12
-            repeat: true
-            running: true
-
-            onTriggered: {
-                ground.x -= 1
-                ground.width += 1
-            }
-        }
-    }
-
-    Image {
-        id: ready
-        anchors.horizontalCenter: parent.horizontalCenter
-        source: "sprites/getready.png"
-        y: 60
-    }
-
-    Image {
-        id: tap
-        anchors.horizontalCenter: parent.horizontalCenter
-        source: "sprites/tap.png"
-        y: 150
-    }
-
-    Image {
-        id: gameOverSplash
-        anchors.horizontalCenter: parent.horizontalCenter
-        source: "sprites/gameover.png"
-        height: 44
-        y: -height
-        z: 2
-
-        PropertyAnimation {
-            id: gameOverAnim
-            target: gameOverSplash
-            properties: "y"
-            from: -gameOverSplash.height
-            to: 60
-            duration: 600
-
-            onRunningChanged: {
-                if (!running) {
-                    medalsTable.opacity = 1;
-                    playAgain.opacity = 1;
-                    console.log(score.count);
-                    setFinalScore(score.count);
-                }
-//
-            }
-        }
-    }
-
-    Image {
-        id: medalsTable
-        source: "sprites/medalstable.png"
-        anchors.top: gameOverSplash.bottom
-        anchors.topMargin: 20
-        anchors.horizontalCenter: parent.horizontalCenter
-        z: 2
-        opacity: 0
+        Keys.onPressed: game.flappy()
 
         Image {
-//            source: "bronzemedal.png"
-            x: 24
-            y: 42
+            id: background
+            source: "sprites/bg.png"
+            width: 288
+            height: 511
+            fillMode: Image.TileHorizontally
+
+            Timer {
+                id: backgroundAnim
+                interval: 75
+                repeat: true
+                running: true
+
+                onTriggered: {
+                    background.x -= 1
+                    background.width += 1
+                }
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: flappy()
+            }
+        }
+
+        Image {
+            id: ground
+            source: "sprites/ground.png"
+            width: 288
+            height: 112
+            y: parent.height - height
+            fillMode: Image.TileHorizontally
+
+            Connections {
+                target: game
+
+                onBirdPositionChanged: {
+                    if (game.bird.y + game.bird.height >= ground.y) {
+                        if (game.initialized) game.terminateGame()
+                        gravity.stop()
+                        gameOverAnim.start();
+                    }
+                }
+            }
+
+            Timer {
+                id: groundAnim
+                interval: 12
+                repeat: true
+                running: true
+
+                onTriggered: {
+                    ground.x -= 1
+                    ground.width += 1
+                }
+            }
+        }
+
+        Image {
+            id: ready
+            anchors.horizontalCenter: parent.horizontalCenter
+            source: "sprites/getready.png"
+            y: 60
+        }
+
+        Image {
+            id: tap
+            anchors.horizontalCenter: parent.horizontalCenter
+            source: "sprites/tap.png"
+            y: 150
+        }
+
+        Image {
+            id: gameOverSplash
+            anchors.horizontalCenter: parent.horizontalCenter
+            source: "sprites/gameover.png"
+            height: 44
+            y: -height
+            z: 2
+
+            PropertyAnimation {
+                id: gameOverAnim
+                target: gameOverSplash
+                properties: "y"
+                from: -gameOverSplash.height
+                to: 60
+                duration: 600
+
+                onRunningChanged: {
+                    if (!running) {
+                        medalsTable.opacity = 1;
+                        playAgain.opacity = 1;
+                        console.log(score.count);
+                        setFinalScore(score.count);
+                    }
+                    //
+                }
+            }
+        }
+
+        Image {
+            id: medalsTable
+            source: "sprites/medalstable.png"
+            anchors.top: gameOverSplash.bottom
+            anchors.topMargin: 20
+            anchors.horizontalCenter: parent.horizontalCenter
+            z: 2
+            opacity: 0
+
+            Image {
+                //            source: "bronzemedal.png"
+                x: 24
+                y: 42
+            }
+
+            Item {
+                id: finalScore
+                width: 12
+                height: 24
+                x: 170
+                y: 35
+            }
+        }
+
+        Image {
+            id: playAgain
+            source: "sprites/playagain.png"
+            anchors.top: medalsTable.bottom
+            anchors.topMargin: 20
+            anchors.horizontalCenter: parent.horizontalCenter
+            opacity: 0
+            z: 2
+
+            MouseArea {
+                anchors.fill: parent
+
+                onClicked: {
+                    playAgain.opacity = 0;
+                    medalsTable.opacity = 0;
+
+                    gameOverSplash.y = -gameOverSplash.height;
+                    ready.opacity = 1;
+                    tap.opacity = 1;
+                    game.destroyPipes();
+
+                    backgroundAnim.start();
+                    groundAnim.start();
+
+                    bird.y = 180;
+                    bird.rotation = 0;
+
+                    gravity.interval = 9;
+                }
+            }
+        }
+
+        Timer {
+            id: pipeCreator
+            interval: 2500
+            repeat: true
+
+            onTriggered: {
+                var component = Qt.createComponent("Pipe.qml")
+                var pipe = component.createObject(parent)
+                pipe.init()
+            }
+        }
+
+        Image {
+            id: bird
+            rotation: 0
+            source: "sprites/bird.png"
+            width: 34
+            height: 24
+            x: (parent.width / 2 - width / 2) - 60
+            y: 180
+            z: 1
+
+            onYChanged: {
+                game.birdPositionChanged()
+            }
         }
 
         Item {
-            id: finalScore
-            width: 12
-            height: 24
-            x: 170
-            y: 35
+            id: score
+            width: 24
+            height: 36
+            anchors.horizontalCenter: parent.horizontalCenter
+            y: 10
+            z: 1
+            property int count: 0
         }
-    }
-
-    Image {
-        id: playAgain
-        source: "sprites/playagain.png"
-        anchors.top: medalsTable.bottom
-        anchors.topMargin: 20
-        anchors.horizontalCenter: parent.horizontalCenter
-        opacity: 0
-        z: 2
-
-        MouseArea {
-            anchors.fill: parent
-
-            onClicked: {
-                playAgain.opacity = 0;
-                medalsTable.opacity = 0;
-
-                gameOverSplash.y = -gameOverSplash.height;
-                ready.opacity = 1;
-                tap.opacity = 1;
-                game.destroyPipes();
-
-                backgroundAnim.start();
-                groundAnim.start();
-
-                bird.y = 180;
-                bird.rotation = 0;
-
-                gravity.interval = 9;
-            }
-        }
-    }
-
-    Timer {
-        id: pipeCreator
-        interval: 2500
-        repeat: true
-
-        onTriggered: {
-            var component = Qt.createComponent("Pipe.qml")
-            var pipe = component.createObject(game)
-            pipe.init()
-        }
-    }
-
-    Image {
-        id: bird
-        rotation: 0
-        source: "sprites/bird.png"
-        width: 34
-        height: 24
-        x: (parent.width / 2 - width / 2) - 60
-        y: 180
-        z: 1
-
-        onYChanged: {
-            game.birdPositionChanged()
-        }
-    }
-
-    Item {
-        id: score
-        width: 24
-        height: 36
-        anchors.horizontalCenter: parent.horizontalCenter
-        y: 10
-        z: 1
-        property int count: 0
     }
 
     SequentialAnimation {
