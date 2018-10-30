@@ -3,7 +3,7 @@ import QtQuick 2.0
 Item {
     id: pipe
     width: 52
-    height: 399
+    height: 370
 
     property bool ignore: false
 
@@ -19,9 +19,9 @@ Item {
     BorderImage {
       id: down
       source: "sprites/pipe.png"
-      height: 100
+      //height: 100
       width: parent.width
-      y: 299
+      //y: 299
       horizontalTileMode: BorderImage.Stretch
       verticalTileMode: BorderImage.Stretch
       border { left: 0; top: 52; right: 0; bottom: 0 }
@@ -38,13 +38,13 @@ Item {
     }
 
     function init() {
-        var w = Math.floor((Math.random()*200)+40);
+        var w = Math.random() * (172 - 52) + 52;
         //up.y -= w;
         up.height = w;
         up.rotation = 180;
 
         down.y = up.height + 120;
-        down.height = 399 - (down.y);
+        down.height = pipe.height - down.y;
     }
 
     Connections {
